@@ -6,7 +6,7 @@ metadata:
     app: book-service
   annotations:
     service.beta.kubernetes.io/decc-load-balancer-http-backend-ports: "8080"
-    service.beta.kubernetes.io/decc-load-balancer-hostname: "book-service.svc-stage.eng.vmware.com"
+    service.beta.kubernetes.io/decc-load-balancer-hostname: "book-service.svc-stage.eng.ysree.com"
     service.beta.kubernetes.io/decc-load-balancer-log-level: "info"
 spec:
   type: LoadBalancer
