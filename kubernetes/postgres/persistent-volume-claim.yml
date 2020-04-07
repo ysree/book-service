@@ -8,11 +8,11 @@ metadata:
     # This is created by DECC when user's Storage capacity request is approved in DECC UI
     volume.beta.kubernetes.io/storage-class: 980d025e2c3e4c53a3452facb98b551e 
   labels:
-    # [OPTIONAL] VMware username (without @vmware.com).
+    # [OPTIONAL username
     username: "sreenivasay"
  
     # [OPTIONAL] Domain information for the username provided above
-    userDomain: "VMWAREM"
+    userDomain: "MYDOMAIN"
  
 spec:
   accessModes:
