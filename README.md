@@ -1,2 +1,2 @@
 # book-service
-Book service (Docker, Spring-boot, Mariadb)
+Book service (Docker, Docker-compose, Spring-boot, Postgres, Kubernetes)
