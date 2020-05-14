@@ -1,6 +1,11 @@
 pipeline {
-    agent any
-
+    
+    agent { 
+        node { 
+            label 'vm-cloud'
+        } 
+    } 
+    
     options {
         timeout(time: 30, unit: 'MINUTES') 
     }
