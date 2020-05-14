@@ -1,7 +1,7 @@
 pipeline {
     
     agent { 
-        label 'vm-cloud' 
+        label 'container-cloud' 
     } 
     
     options {
