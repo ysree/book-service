@@ -5,6 +5,10 @@ pipeline {
         timeout(time: 30, unit: 'MINUTES') 
     }
     
+    script {
+        System.setProperty("org.jenkinsci.plugins.durabletask.BourneShellScript.HEARTBEAT_CHECK_INTERVAL", "86400");
+    }
+    
     triggers {
         pollSCM 'H/10 * * * *'
     }
@@ -24,7 +28,6 @@ pipeline {
 
         stage('build') {
             steps {
-                System.setProperty("org.jenkinsci.plugins.durabletask.BourneShellScript.HEARTBEAT_CHECK_INTERVAL", "86400")
                 sh 'chmod +x gradlew'
                 sh './gradlew clean build'
             }  
