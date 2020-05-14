@@ -24,12 +24,8 @@ pipeline {
 
         stage('build') {
             steps {
-                if (isUnix()) {
-                    sh 'chmod +x gradlew'
-                    sh './gradlew clean build'
-                } else {
-                    bat 'gradlew.bat clean build'
-                }
+                sh 'chmod +x gradlew'
+                sh './gradlew clean build'
             }  
         }
     }
