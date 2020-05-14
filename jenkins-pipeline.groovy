@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     options {
-        timeout(time: 1, unit: 'HOURS') 
+        timeout(time: 30, unit: 'MINUTES') 
     }
     
     triggers {
@@ -24,9 +24,11 @@ pipeline {
 
         stage('build') {
             steps {
-                withGradle {
+                if (isUnix()) {
                     sh 'chmod +x gradlew'
                     sh './gradlew clean build'
+                } else {
+                    bat 'gradlew.bat clean build'
                 }
             }  
         }
