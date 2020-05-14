@@ -23,9 +23,6 @@ pipeline {
         }
 
         stage('build') {
-            script {
-                System.setProperty("org.jenkinsci.plugins.durabletask.BourneShellScript.HEARTBEAT_CHECK_INTERVAL", "86400");
-            }
             steps {
                 sh 'chmod +x gradlew'
                 sh './gradlew clean build'
