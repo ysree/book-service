@@ -27,7 +27,7 @@ public class BookServiceController {
     }
 
     @PostMapping(path="/add-book", produces = "application/json")
-    public @ResponseBody Book addNewUser(@RequestParam(value = "book_name") String bookName,
+    public @ResponseBody Book addNewBook(@RequestParam(value = "book_name") String bookName,
                      @RequestParam(value="author") String author,
                      @RequestParam(value="price") Double price) {
         Book book = new Book();
