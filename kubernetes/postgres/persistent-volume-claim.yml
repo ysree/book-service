@@ -2,16 +2,15 @@ kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
   name: nfs-postgres-claim
-  namespace: scdc1-staging-ysree-ss-backend
+  namespace: scdc1-staging-ysree
   annotations:
     # [REQUIRED] StorageClass label
-    # This is created by DECC when user's Storage capacity request is approved in DECC UI
     volume.beta.kubernetes.io/storage-class: 980d025e2c3e4c53a3452facb98b551e
   labels:
     username: "sreenivasay"
 
     # [OPTIONAL] Domain information for the username provided above
-    userDomain: "VMWAREM"
+    userDomain: "local"
 
 spec:
   accessModes:
