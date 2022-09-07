@@ -1,4 +1,4 @@
-# Jenkins Inbound Agent with VMware vSphere SDK, pyvmomi, OVF tool
+# Jenkins Inbound Agent with VMware vSphere SDK, pyvmomi, OVF tool, govmomi, AVI SDK
 
 FROM jenkins/inbound-agent
 
@@ -60,5 +60,9 @@ RUN /bin/sh -c OVFTOOL_INSTALLER=VMware-ovftool-${OVFTOOL_VERSION}-lin.x86_64.bu
 
 RUN /bin/sh ${OVFTOOL_INSTALLER} -p /usr/local --eulas-agreed --required  && rm -f ${OVFTOOL_INSTALLER}*
 #RUN ovftool --help
+
+# Install GOVC
+RUN curl -L -o - "https://github.com/vmware/govmomi/releases/latest/download/govc_$(uname -s)_$(uname -m).tar.gz" | tar -C /usr/local/bin -xvzf - govc
+RUN govc version -l
 
 RUN mkdir -p /root/.ssh/ && touch /root/.ssh/known_hosts
