@@ -11,21 +11,43 @@ RUN apt-get update -qqy \
   wget \
   cron \
   jq \
+  iputils-ping \
   git-core \
-  openssh-server openssh-client \
+  openssh-server \
+  openssh-client \
   sshpass \
   git \
   apt-transport-https \
   init \
+  nmap \
   python3 \
   python3-pip
 
-RUN pip3 install vcd-cli pyvmomi
+RUN nmap --version
+
+RUN pip3 install vcd-cli \
+  pyvmomi==7.0 \
+  oauthlib==3.1.0 \
+  paramiko==2.7.1 \
+  pycparser==2.20 \
+  PyHamcrest==1.9.0 \
+  PyJWT==1.7.1 \
+  PyNaCl==1.4.0 \
+  pyOpenSSL==19.0.0 \
+  PyYAML==5.3.1 \
+  requests==2.22.0 \
+  requests-unixsocket==0.2.0 \
+  simplejson==3.16.0 \
+  six==1.14.0 \
+  ssh-import-id==5.10 \
+  urllib3==1.25.8 \
+  virtualenv==20.0.17 \
+  pexpect==4.8.0 \
+  avisdk==21.1.4 \
+  retry==0.9.2
 
 RUN pip3 install --upgrade setuptools
 RUN pip3 install --upgrade git+https://github.com/vmware/vsphere-automation-sdk-python.git
-
-RUN pip3 install vcd-cli
 
 # OVF tool installation. Reference from https://hub.docker.com/r/maroskukan/ovftool/
 ENV LANG=C.UTF-8
@@ -39,4 +61,4 @@ RUN /bin/sh -c OVFTOOL_INSTALLER=VMware-ovftool-${OVFTOOL_VERSION}-lin.x86_64.bu
 RUN /bin/sh ${OVFTOOL_INSTALLER} -p /usr/local --eulas-agreed --required  && rm -f ${OVFTOOL_INSTALLER}*
 #RUN ovftool --help
 
-RUN which ovftool
+RUN mkdir -p /root/.ssh/ && touch /root/.ssh/known_hosts
