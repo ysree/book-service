@@ -1,47 +1,42 @@
-FROM ubuntu:22.04
-LABEL AUTHOR="sreenivasay"
+# Jenkins Inbound Agent with VMware vSphere SDK, pyvmomi, OVF tool
 
-RUN apt-get update && apt-get dist-upgrade -y && rm -rf /var/lib/apt/lists/*
-RUN apt-get update && apt-get install -y \
-    git \
-    apt-transport-https \
-    curl \
-    init \
-    wget \
-    jq \
-    sshpass \
-    python3 \
-    python3-pip \
-    openssh-server openssh-client \
- && rm -rf /var/lib/apt/lists/*
+FROM jenkins/inbound-agent
 
-# Install python packages
+USER 0
+
+RUN apt-get update -qqy \
+  && apt-get -qqy install \
+  curl \
+  unzip \
+  wget \
+  cron \
+  jq \
+  git-core \
+  openssh-server openssh-client \
+  sshpass \
+  git \
+  apt-transport-https \
+  init \
+  python3 \
+  python3-pip
+
 RUN pip3 install vcd-cli pyvmomi
 
 RUN pip3 install --upgrade setuptools
 RUN pip3 install --upgrade git+https://github.com/vmware/vsphere-automation-sdk-python.git
-# Install Java
-RUN apt-get update && apt-get install -y openjdk-8-jdk && rm -rf /var/lib/apt/lists/*
 
-# Add Jenkins user and group
-RUN groupadd -g 10000 jenkins \
-    && useradd -d $HOME -u 10000 -g jenkins jenkins
+RUN pip3 install vcd-cli
 
-# Install jenkins jnlp
-RUN curl --create-dirs -sSLo /usr/share/jenkins/slave.jar https://repo.jenkins-ci.org/public/org/jenkins-ci/main/remoting/${VERSION}/remoting-${VERSION}.jar \
-    && chmod 755 /usr/share/jenkins \
-    && chmod 644 /usr/share/jenkins/slave.jar
+# OVF tool installation. Reference from https://hub.docker.com/r/maroskukan/ovftool/
+ENV LANG=C.UTF-8
+ENV LC_ALL=C.UTF-8
+ENV OVFTOOL_VERSION=4.4.0-16360108
+ENV OVFTOOL_INSTALLER=VMware-ovftool-${OVFTOOL_VERSION}-lin.x86_64.bundle
+# RUN echo "$OVFTOOL_INSTALLER"
 
-COPY jenkins-slave /usr/local/bin/jenkins-slave
-RUN chmod 755 /usr/local/bin/jenkins-slave && chown jenkins:jenkins /usr/local/bin/jenkins-slave
+RUN /bin/sh -c OVFTOOL_INSTALLER=VMware-ovftool-${OVFTOOL_VERSION}-lin.x86_64.bundle  && wget -q https://stsharedservices.blob.core.windows.net/pub/ovftool/${OVFTOOL_INSTALLER}  && wget -q https://stsharedservices.blob.core.windows.net/pub/ovftool/${OVFTOOL_INSTALLER}.sha256  && sha256sum -c ${OVFTOOL_INSTALLER}.sha256
 
-RUN mkdir -p /home/jenkins/.jenkins \
-    && mkdir -p /home/jenkins/agent \
-    && chown -R jenkins:jenkins /home/jenkins
+RUN /bin/sh ${OVFTOOL_INSTALLER} -p /usr/local --eulas-agreed --required  && rm -f ${OVFTOOL_INSTALLER}*
+#RUN ovftool --help
 
-VOLUME /home/jenkins/.jenkins
-VOLUME /home/jenkins/agent
-
-WORKDIR /home/jenkins
-
-ENTRYPOINT ["/usr/local/bin/jenkins-slave"]
+RUN which ovftool
